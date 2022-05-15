@@ -1,4 +1,5 @@
 export interface Entry {
+  id?: number | null;
   projectId: number;
   taskDescription: string;
   timeSpent: number;
