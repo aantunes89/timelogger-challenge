@@ -2,10 +2,11 @@ import * as React from "react";
 import Projects from "./views/Projects";
 import "./tailwind.generated.css";
 import { GlobalStyle } from "./styles/global";
+import { ProjectsProvider } from "./hooks/useProjects";
 
 export default function App() {
   return (
-    <>
+    <ProjectsProvider>
       <GlobalStyle />
       <header className="bg-gray-900 text-white flex items-center h-12 w-full">
         <div className="container mx-auto">
@@ -20,6 +21,6 @@ export default function App() {
           <Projects />
         </div>
       </main>
-    </>
+    </ProjectsProvider>
   );
 }
