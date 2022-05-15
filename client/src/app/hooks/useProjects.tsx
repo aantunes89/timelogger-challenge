@@ -15,7 +15,8 @@ interface ProjectsProviderProps {
 
 interface ProjectContextData {
   projects: Project[];
-  // entries: Entry[];
+  projectId: number | null;
+  setProjectId: (id: number) => void;
 }
 
 const ProjectsContext = createContext<ProjectContextData>(
@@ -24,6 +25,7 @@ const ProjectsContext = createContext<ProjectContextData>(
 
 export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [projectId, setProjectId] = useState<number | null>(null);
 
   useEffect((): void => {
     try {
@@ -37,7 +39,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   }, []);
 
   return (
-    <ProjectsContext.Provider value={{ projects }}>
+    <ProjectsContext.Provider value={{ projects, projectId, setProjectId }}>
       {children}
     </ProjectsContext.Provider>
   );
