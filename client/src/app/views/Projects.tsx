@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
 import Table from "../components/Table/Table";
 
 export default function Projects() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  function handleOpenNewEntryModal() {
+    setIsModalOpen(true);
+  }
+
+  function handleCloseNewEntryModal() {
+    setIsModalOpen(false);
+  }
+
   return (
     <>
       <div className="flex items-center my-6">
         <div className="w-1/2">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button
+            onClick={() => handleOpenNewEntryModal()}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
             Add entry
           </button>
         </div>
@@ -28,6 +42,11 @@ export default function Projects() {
           </form>
         </div>
       </div>
+
+      <NewEntryModal
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseNewEntryModal}
+      />
 
       <Table />
     </>
