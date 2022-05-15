@@ -7,7 +7,7 @@ export default function Table() {
 
   function renderProjects(projects: Project[]) {
     return projects.map(({ id, name }) => (
-      <tr>
+      <tr key={id}>
         <td className="border px-4 py-2 w-12">{id}</td>
         <td className="border px-4 py-2">{name}</td>
         <td className="border px-4 py-2">abc</td>
