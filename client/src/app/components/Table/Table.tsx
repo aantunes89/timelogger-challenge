@@ -1,6 +1,6 @@
 import React from "react";
-import { useProjects } from "../hooks/useProjects";
-import { Project } from "../models/Project";
+import { useProjects } from "../../hooks/useProjects";
+import { Project } from "../../models/Project";
 
 export default function Table() {
   const { projects } = useProjects();
