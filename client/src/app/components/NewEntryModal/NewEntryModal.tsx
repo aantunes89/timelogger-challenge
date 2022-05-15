@@ -3,7 +3,9 @@ import Modal from "react-modal";
 import { Container } from "./style";
 
 import closeSvg from "../../assets/close.svg";
+
 import { Entry } from "../../models/Entry";
+import { storeEntry } from "../../services/storageService";
 
 Modal.setAppElement("#root");
 
@@ -41,22 +43,15 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   function onSaveEntry(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.preventDefault();
 
-    // colocar no serviço
-    const newEntry: Entry = {
+    storeEntry({
       projectId: 1,
       taskDescription: description,
       timeSpent,
       hourlyPrice: hourlyRate,
       totalPrice,
-    };
-    // colocar no serviço
-    localStorage.setItem(
-      `${localStorage.length + 1}`,
-      JSON.stringify(newEntry)
-    );
+    });
 
     resetState();
-    onRequestClose();
   }
 
   function resetState() {
