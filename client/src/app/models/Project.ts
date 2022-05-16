@@ -6,4 +6,5 @@ export interface Project {
   deadLine: Date;
   entries: Entry[];
   totalPrice: number;
+  totalTimeSpent: number;
 }
