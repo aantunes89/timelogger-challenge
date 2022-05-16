@@ -31,7 +31,6 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	body {		
-		background-color: var(--background);
 
 		-webket-font-smoothing: antialiased;
 	}
