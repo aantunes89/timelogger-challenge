@@ -1,55 +1,60 @@
 import React from "react";
 import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
-import { Project } from "../../models/Project";
+
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Button,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ContentContainer } from "./styles";
 
 export default function Table() {
-  const { projects, projectId, setProjectId } = useProjects();
-  const {
-    setModalOpen,
-    isFreelancerOverviewVisible,
-    setFreelancerOverviewVisible,
-  } = useScreenState();
+  const { projects, setProjectId } = useProjects();
+  const { setModalOpen } = useScreenState();
 
   function addEntry(projectId: number) {
     setProjectId(projectId);
     setModalOpen(true);
   }
 
-  function toggleFreelancerOverview() {
-    setFreelancerOverviewVisible(!isFreelancerOverviewVisible);
+  function renderAccordions() {
+    return projects.map((project) => {
+      return (
+        <Accordion key={project.id}>
+          <AccordionSummary
+            id={`panel${project.id}`}
+            expandIcon={<ExpandMoreIcon />}
+          >
+            <ContentContainer>
+              <Typography style={{ marginRight: 8 }}>
+                <label>Project Name</label> {project?.name}
+              </Typography>
+
+              <Typography>
+                <label>Deadline</label>
+                {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
+              </Typography>
+
+              <Typography>
+                <label>Current Price</label>
+                {`$${project?.totalPrice}`}
+              </Typography>
+            </ContentContainer>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <Button variant="outlined" onClick={() => addEntry(project.id)}>
+              Add Entry
+            </Button>
+          </AccordionDetails>
+        </Accordion>
+      );
+    });
   }
 
-  function renderProjects(projects: Project[]) {
-    return projects.map(({ id, name }) => (
-      <tr key={id}>
-        <td className="border px-4 py-2 w-12">{id}</td>
-        <td className="border px-4 py-2">{name}</td>
-        <td className="border px-4 py-2">
-          <button onClick={() => toggleFreelancerOverview()}>
-            Show Overview
-          </button>
-        </td>
-        <td className="border px-4 py-2">
-          <button onClick={() => addEntry(id)}>Add Entry</button>
-        </td>
-      </tr>
-    ));
-  }
-
-  return (
-    <>
-      <table className="table-fixed w-full">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="border px-4 py-2 w-12">#</th>
-            <th className="border px-4 py-2">Project Name</th>
-            <th className="border px-4 py-2">abc</th>
-            <th className="border px-4 py-2">xyz</th>
-          </tr>
-        </thead>
-        <tbody>{projects && renderProjects(projects)}</tbody>
-      </table>
-    </>
-  );
+  return <>{projects && renderAccordions()}</>;
 }
