@@ -1,13 +1,11 @@
 import React from "react";
-import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
-
 import { Button, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { useScreenState } from "../hooks/useScreenState";
-
+import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
 import Table from "../components/Table/Table";
 import { RoundButton } from "../components/RoundButton/styles";
+import { useScreenState } from "../hooks/useScreenState";
 
 export default function Projects() {
   const { isModalOpen, setModalOpen } = useScreenState();
