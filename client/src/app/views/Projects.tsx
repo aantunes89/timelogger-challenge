@@ -1,14 +1,16 @@
 import React from "react";
 import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
-import Table from "../components/Table/Table";
+
+import { Button, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
 import { useScreenState } from "../hooks/useScreenState";
+
+import Table from "../components/Table/Table";
+import { RoundButton } from "../components/RoundButton/styles";
 
 export default function Projects() {
   const { isModalOpen, setModalOpen } = useScreenState();
-
-  function handleOpenNewEntryModal() {
-    setModalOpen(true);
-  }
 
   function handleCloseNewEntryModal() {
     setModalOpen(false);
@@ -18,28 +20,30 @@ export default function Projects() {
     <>
       <div className="flex items-center my-6">
         <div className="w-1/2">
-          <button
-            onClick={() => handleOpenNewEntryModal()}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Add entry
-          </button>
+          <Button size="large" variant="contained">
+            Add Project
+          </Button>
         </div>
 
-        <div className="w-1/2 flex justify-end">
+        <div className="w-1/2 flex justify-end align-center">
           <form>
-            <input
+            {/* <input
               className="border rounded-full py-2 px-4"
               type="search"
               placeholder="Search"
               aria-label="Search"
+            /> */}
+
+            <TextField
+              size="small"
+              id="outlined-basic"
+              label="Search"
+              variant="outlined"
             />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white rounded-full py-2 px-4 ml-2"
-              type="submit"
-            >
-              Search
-            </button>
+
+            <RoundButton variant="contained">
+              <SearchIcon />
+            </RoundButton>
           </form>
         </div>
       </div>
