@@ -1,6 +1,6 @@
 export interface Entry {
   id?: number | null;
-  projectId: number;
+  projectId: number | null;
   taskDescription: string;
   timeSpent: number;
   hourlyPrice: number;

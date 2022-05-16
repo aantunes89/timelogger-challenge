@@ -4,8 +4,8 @@ import { Container } from "./style";
 
 import closeSvg from "../../assets/close.svg";
 
-import { Entry } from "../../models/Entry";
 import { storeEntry } from "../../services/storageService";
+import { useProjects } from "../../hooks/useProjects";
 
 Modal.setAppElement("#root");
 
@@ -15,6 +15,8 @@ interface NewEntryModalProps {
 }
 
 export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
+  const { projectId } = useProjects();
+
   const [description, setDescription] = useState<string>("");
   const [timeSpent, setTimeSpent] = useState<number>(0);
   const [hourlyRate, setHourlyRate] = useState<number>(0);
@@ -26,25 +28,28 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
       : setTotalPrice(0);
   }, [timeSpent, hourlyRate]);
 
-  function handleHourlyRateUpdate(event: any) {
+  function handleHourlyRateUpdate(event: React.ChangeEvent<HTMLInputElement>) {
     const newVal = numberParserValidation(event);
     setHourlyRate(newVal);
   }
 
-  function handleTimeSpentUpdate(event: any) {
+  function handleTimeSpentUpdate(event: React.ChangeEvent<HTMLInputElement>) {
     const newVal = numberParserValidation(event);
     setTimeSpent(newVal);
   }
 
-  function numberParserValidation(event: any) {
-    return event.target.value ? Number.parseInt(event.target.value) : 0;
+  function numberParserValidation({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = target;
+    return value ? Number.parseInt(value) : 0;
   }
 
   function onSaveEntry(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     event.preventDefault();
 
     storeEntry({
-      projectId: 1,
+      projectId,
       taskDescription: description,
       timeSpent,
       hourlyPrice: hourlyRate,
