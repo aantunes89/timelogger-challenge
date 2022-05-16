@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -69,15 +70,34 @@ namespace Timelogger.Api
 		private static void SeedDatabase(IServiceScope scope)
 		{
 			var context = scope.ServiceProvider.GetService<ApiContext>();
+
 			var testProject1 = new Project
 			{
 				Id = 1,
-				Name = "e-conomic Interview"
+				Name = "Project 1",
+				DeadLine = new DateTime(2022, 4, 9),
+			};
+
+			var testProject2 = new Project
+			{
+				Id = 2,
+				Name = "Project 2dsadsadasd",
+				DeadLine = new DateTime(2023, 4, 9)
+			};
+
+			var testProject3 = new Project
+			{
+				Id = 3,
+				Name = "Project 3",
+				DeadLine = new DateTime(2023, 4, 9)
 			};
 
 			context.Projects.Add(testProject1);
+			context.Projects.Add(testProject2);
+			context.Projects.Add(testProject3);
 
 			context.SaveChanges();
 		}
+	
 	}
 }
