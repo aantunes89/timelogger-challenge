@@ -2,13 +2,23 @@ import React from "react";
 import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
 
+import DataTable from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
   Button,
+  Grid,
 } from "@mui/material";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ContentContainer } from "./styles";
 
@@ -30,24 +40,71 @@ export default function Table() {
             expandIcon={<ExpandMoreIcon />}
           >
             <ContentContainer>
-              <Typography style={{ marginRight: 8 }}>
-                <label>Project Name</label> {project?.name}
-              </Typography>
-
-              <Typography>
-                <label>Deadline</label>
-                {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
-              </Typography>
-
-              <Typography>
-                <label>Current Price</label>
-                {`$${project?.totalPrice}`}
-              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <Typography className="truncate">
+                    <label>Name</label>
+                    {project?.name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>
+                    <label>Deadline</label>
+                    {new Date(`${project?.deadLine}`).toLocaleDateString(
+                      "pt-BR"
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>
+                    <label>Total Price</label>
+                    {`$${project?.totalPrice}`}
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography>
+                    <label>Total Work Time</label>
+                    {`${project?.totalTimeSpent}h`}
+                  </Typography>
+                </Grid>
+              </Grid>
             </ContentContainer>
           </AccordionSummary>
 
           <AccordionDetails>
-            <Button variant="outlined" onClick={() => addEntry(project.id)}>
+            <TableContainer component={Paper}>
+              <DataTable sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Task Description</TableCell>
+                    <TableCell align="center">Hours Spent</TableCell>
+                    <TableCell align="center">Hourly Rate</TableCell>
+                    <TableCell align="center">Total</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {project.entries.map((entry) => (
+                    <TableRow
+                      key={entry.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {entry.taskDescription}
+                      </TableCell>
+                      <TableCell align="center">{entry.timeSpent}h</TableCell>
+                      <TableCell align="center">${entry.hourlyPrice}</TableCell>
+                      <TableCell align="center">${entry.totalPrice}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </DataTable>
+            </TableContainer>
+
+            <Button
+              style={{ marginTop: "2rem" }}
+              variant="outlined"
+              onClick={() => addEntry(project.id)}
+            >
               Add Entry
             </Button>
           </AccordionDetails>
