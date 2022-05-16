@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import { Container } from "./style";
+import { Container } from "./styles";
 
 import closeSvg from "../../assets/close.svg";
 
