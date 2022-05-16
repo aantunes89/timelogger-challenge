@@ -9,7 +9,7 @@ import { getAll } from "../api/projects";
 import { Project } from "../models/Project";
 import { getEntries } from "../services/storageService";
 import { setupProjectPayload } from "../services/projectFormatterService";
-import { ScreenStateProvider } from "./useScreenState";
+import { useScreenState } from "./useScreenState";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -29,17 +29,23 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  useEffect((): void => {
-    const getProjects = async () => {
-      try {
-        await getAll().then((data) => updateProjectsPayload(data));
-      } catch (error) {
-        console.log("Show Error");
-      }
-    };
+  const { shouldUpdate, setShouldUpdate } = useScreenState();
 
-    getProjects();
-  }, []);
+  useEffect((): void => {
+    if (shouldUpdate) {
+      const getProjects = async () => {
+        try {
+          await getAll().then((data) => updateProjectsPayload(data));
+        } catch (error) {
+          console.log("Show Error");
+        }
+      };
+
+      getProjects();
+    }
+
+    setShouldUpdate(false);
+  }, [shouldUpdate]);
 
   function updateProjectsPayload(projects: Project[]) {
     const entries = getEntries();
@@ -58,7 +64,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         setProjectId,
       }}
     >
-      <ScreenStateProvider children={children} />
+      {children}
     </ProjectsContext.Provider>
   );
 }
