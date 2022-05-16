@@ -1,18 +1,18 @@
 import { Entry } from "../models/Entry";
+import { Project } from "../models/Project";
 
 enum StorageKeys {
   ENTRIES = "ENTRIES",
+  SEED = "SEED",
 }
 
 export function storeEntry(entry: Entry) {
   const currentEntries = getEntries();
 
   if (currentEntries) {
-    const parsedEntries = JSON.parse(currentEntries) as Entry[];
+    const newEntry: Entry = { ...entry, id: currentEntries.length + 1 };
 
-    const newEntry: Entry = { ...entry, id: parsedEntries.length + 1 };
-
-    const newEntriesList = [...parsedEntries, newEntry];
+    const newEntriesList = [...currentEntries, newEntry];
 
     localStorage.setItem(StorageKeys.ENTRIES, JSON.stringify(newEntriesList));
   } else {
@@ -21,8 +21,15 @@ export function storeEntry(entry: Entry) {
   }
 }
 
-function getEntries() {
-  return localStorage.getItem(StorageKeys.ENTRIES)
-    ? localStorage.getItem(StorageKeys.ENTRIES)
-    : null;
+export function getEntries(): Entry[] {
+  if (localStorage.getItem(StorageKeys.ENTRIES)) {
+    const entries = localStorage.getItem(StorageKeys.ENTRIES);
+    return entries ? (JSON.parse(entries) as Entry[]) : [];
+  }
+
+  return [];
+}
+
+export function storeSeed(project: Project[]): void {
+  localStorage.setItem(StorageKeys.SEED, JSON.stringify(project));
 }
