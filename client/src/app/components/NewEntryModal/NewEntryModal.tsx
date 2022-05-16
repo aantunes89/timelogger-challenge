@@ -6,8 +6,12 @@ import closeSvg from "../../assets/close.svg";
 
 import { storeEntry } from "../../services/storageService";
 import { useProjects } from "../../hooks/useProjects";
+import { Button } from "@mui/material";
 
 Modal.setAppElement("#root");
+
+type NewEntryInputEvent = React.ChangeEvent<HTMLInputElement>;
+type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 interface NewEntryModalProps {
   isOpen: boolean;
@@ -28,24 +32,16 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
       : setTotalPrice(0);
   }, [timeSpent, hourlyRate]);
 
-  function handleHourlyRateUpdate(event: React.ChangeEvent<HTMLInputElement>) {
-    const newVal = numberParserValidation(event);
-    setHourlyRate(newVal);
-  }
-
-  function handleTimeSpentUpdate(event: React.ChangeEvent<HTMLInputElement>) {
-    const newVal = numberParserValidation(event);
-    setTimeSpent(newVal);
-  }
-
-  function numberParserValidation({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputNumber(
+    { target }: NewEntryInputEvent,
+    cb: (val: number) => void
+  ) {
     const { value } = target;
-    return value ? Number.parseInt(value) : 0;
+    const newVal = value ? Number.parseInt(value) : 0;
+    return cb(newVal);
   }
 
-  function onSaveEntry(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function onSaveEntry(event: NewEntrySubmitEvent) {
     event.preventDefault();
 
     storeEntry({
@@ -93,7 +89,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
           min={0}
           placeholder="Time Spent"
           value={timeSpent}
-          onChange={(e) => handleTimeSpentUpdate(e)}
+          onChange={(e) => handleInputNumber(e, setTimeSpent)}
         />
 
         <input
@@ -101,7 +97,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
           min={0}
           placeholder="Hourly Rate"
           value={hourlyRate}
-          onChange={(e) => handleHourlyRateUpdate(e)}
+          onChange={(e) => handleInputNumber(e, setHourlyRate)}
         />
 
         <input
@@ -113,13 +109,13 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
         />
 
         <div className="action-buttons__wrapper">
-          <button
+          <Button
             disabled={totalPrice ? false : true}
             type="submit"
             onClick={(e) => onSaveEntry(e)}
           >
             Save Entry
-          </button>
+          </Button>
           <button type="button" className="cancel">
             Cancel
           </button>
