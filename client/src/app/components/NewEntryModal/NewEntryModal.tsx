@@ -7,6 +7,7 @@ import closeSvg from "../../assets/close.svg";
 import { storeEntry } from "../../services/storageService";
 import { useProjects } from "../../hooks/useProjects";
 import { Button } from "@mui/material";
+import { useScreenState } from "../../hooks/useScreenState";
 
 Modal.setAppElement("#root");
 
@@ -20,6 +21,8 @@ interface NewEntryModalProps {
 
 export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   const { projectId } = useProjects();
+
+  const { setShouldUpdate } = useScreenState();
 
   const [description, setDescription] = useState<string>("");
   const [timeSpent, setTimeSpent] = useState<number>(0);
@@ -53,6 +56,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
     });
 
     resetState();
+    setShouldUpdate(true);
   }
 
   function resetState() {
@@ -69,6 +73,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
       onRequestClose={onRequestClose}
     >
       <Container>
+        <h2>New Entry</h2>
         <button
           type="button"
           className="react-modal-close"
@@ -77,49 +82,61 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
           <img src={closeSvg} alt="close btn" />
         </button>
 
-        <input
-          type="text"
-          placeholder="Task Description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-
-        <input
-          type="number"
-          min={0}
-          placeholder="Time Spent"
-          value={timeSpent}
-          onChange={(e) => handleInputNumber(e, setTimeSpent)}
-        />
-
-        <input
-          type="number"
-          min={0}
-          placeholder="Hourly Rate"
-          value={hourlyRate}
-          onChange={(e) => handleInputNumber(e, setHourlyRate)}
-        />
-
-        <input
-          type="text"
-          disabled={true}
-          min={0}
-          placeholder="Hourly Rate"
-          value={totalPrice}
-        />
-
-        <div className="action-buttons__wrapper">
-          <Button
-            disabled={totalPrice ? false : true}
-            type="submit"
-            onClick={(e) => onSaveEntry(e)}
-          >
-            Save Entry
-          </Button>
-          <button type="button" className="cancel">
-            Cancel
-          </button>
+        <div className="form-field">
+          <label>Task Description</label>
+          <input
+            type="text"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+          />
         </div>
+
+        <div className="form-field">
+          <label>Time Spent</label>
+          <input
+            type="number"
+            min={0}
+            value={timeSpent}
+            onChange={(e) => handleInputNumber(e, setTimeSpent)}
+          />
+        </div>
+
+        <div className="form-field">
+          <label>Hourly Rate</label>
+          <input
+            type="number"
+            min={0}
+            value={hourlyRate}
+            onChange={(e) => handleInputNumber(e, setHourlyRate)}
+          />
+        </div>
+
+        <footer>
+          <div className="total-description">
+            {totalPrice ? <label>Total: ${totalPrice}</label> : null}
+          </div>
+
+          <div className="action-buttons__wrapper">
+            <Button
+              size="large"
+              variant="outlined"
+              type="button"
+              className="cancel"
+            >
+              Cancel
+            </Button>
+
+            <Button
+              size="large"
+              variant="contained"
+              disabled={totalPrice ? false : true}
+              type="submit"
+              onClick={(e) => onSaveEntry(e)}
+            >
+              Save Entry
+            </Button>
+          </div>
+        </footer>
       </Container>
     </Modal>
   );
