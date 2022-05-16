@@ -30,21 +30,23 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projectId, setProjectId] = useState<number | null>(null);
 
   useEffect((): void => {
+    const getProjects = async () => {
+      try {
+        await getAll().then((data) => updateProjectsPayload(data));
+      } catch (error) {
+        console.log("Show Error");
+      }
+    };
+
     getProjects();
   }, []);
-
-  async function getProjects() {
-    try {
-      await getAll().then((data) => updateProjectsPayload(data));
-    } catch (error) {
-      console.log("Show Error");
-    }
-  }
 
   function updateProjectsPayload(projects: Project[]) {
     const entries = getEntries();
     const newProjectList = setupProjectPayload(projects, entries);
     setProjects(newProjectList);
+    console.log(projects);
+
     // Check if it need to SEED later
   }
 
