@@ -27,13 +27,6 @@ export default function Projects() {
 
         <div className="w-1/2 flex justify-end align-center">
           <form>
-            {/* <input
-              className="border rounded-full py-2 px-4"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            /> */}
-
             <TextField
               size="small"
               id="outlined-basic"
