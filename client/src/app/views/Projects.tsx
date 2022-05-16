@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
 import Table from "../components/Table/Table";
+import { useScreenState } from "../hooks/useScreenState";
 
 export default function Projects() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { isModalOpen, setModalOpen } = useScreenState();
 
   function handleOpenNewEntryModal() {
-    setIsModalOpen(true);
+    setModalOpen(true);
   }
 
   function handleCloseNewEntryModal() {
-    setIsModalOpen(false);
+    setModalOpen(false);
   }
 
   return (
