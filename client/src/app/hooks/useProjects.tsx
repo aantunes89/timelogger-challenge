@@ -7,7 +7,9 @@ import React, {
 } from "react";
 import { getAll } from "../api/projects";
 import { Project } from "../models/Project";
-import { Entry } from "../models/Entry";
+import { getEntries } from "../services/storageService";
+import { setupProjectPayload } from "../services/projectFormatterService";
+import { ScreenStateProvider } from "./useScreenState";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -28,19 +30,33 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projectId, setProjectId] = useState<number | null>(null);
 
   useEffect((): void => {
-    try {
-      const fetchProjects = async () =>
-        await getAll().then((data) => setProjects(data));
+    getProjects();
+  }, []);
 
-      fetchProjects();
+  async function getProjects() {
+    try {
+      await getAll().then((data) => updateProjectsPayload(data));
     } catch (error) {
       console.log("Show Error");
     }
-  }, []);
+  }
+
+  function updateProjectsPayload(projects: Project[]) {
+    const entries = getEntries();
+    const newProjectList = setupProjectPayload(projects, entries);
+    setProjects(newProjectList);
+    // Check if it need to SEED later
+  }
 
   return (
-    <ProjectsContext.Provider value={{ projects, projectId, setProjectId }}>
-      {children}
+    <ProjectsContext.Provider
+      value={{
+        projects,
+        projectId,
+        setProjectId,
+      }}
+    >
+      <ScreenStateProvider children={children} />
     </ProjectsContext.Provider>
   );
 }
