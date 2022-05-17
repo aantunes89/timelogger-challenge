@@ -4,12 +4,8 @@ export const GlobalStyle = createGlobalStyle`
 
 	:root {
 		--background: #F0F2F5;
-		--green: #33CC95;
-		--red: #E52E4D;
-
 		--text-title: #363F5F;
 		--text-body: #969CB3;
-
 		--shape: #FFFFFF;
 	}
 
@@ -99,4 +95,9 @@ export const GlobalStyle = createGlobalStyle`
 		}	
 
 	}
+
+
+
+	
+
 `;
