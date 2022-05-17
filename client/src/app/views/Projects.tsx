@@ -8,6 +8,7 @@ import { RoundButton } from "../components/RoundButton/styles";
 import { Container } from "./styles";
 
 import { useScreenState } from "../hooks/useScreenState";
+import { NewProjectModal } from "../components/NewProjectModal/NewProjectModal";
 
 export default function Projects() {
   const { isModalOpen, setModalOpen } = useScreenState();
@@ -40,6 +41,11 @@ export default function Projects() {
 
       <NewEntryModal
         isOpen={isModalOpen}
+        onRequestClose={handleCloseNewEntryModal}
+      />
+
+      <NewProjectModal
+        isOpen={false}
         onRequestClose={handleCloseNewEntryModal}
       />
 
