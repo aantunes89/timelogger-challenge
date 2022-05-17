@@ -45,7 +45,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     }
 
     setShouldUpdate(false);
-  }, [shouldUpdate]);
+  }, [shouldUpdate, setShouldUpdate]);
 
   function updateProjectsPayload(projects: Project[]) {
     const entries = getEntries();
