@@ -1,6 +1,7 @@
-const BASE_URL = 'http://localhost:3001/api';
+import axios from "axios";
 
-export async function getAll() {
-	const response = await fetch(`${BASE_URL}/projects`);
-	return response.json();
-}
+const BASE_URL = "http://localhost:3001/api";
+
+export const axiosApiService = axios.create({
+  baseURL: BASE_URL,
+});
