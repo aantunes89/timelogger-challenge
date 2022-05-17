@@ -51,9 +51,6 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     const entries = getEntries();
     const newProjectList = setupProjectPayload(projects, entries);
     setProjects(newProjectList);
-    console.log(projects);
-
-    // Check if it need to SEED later
   }
 
   return (
