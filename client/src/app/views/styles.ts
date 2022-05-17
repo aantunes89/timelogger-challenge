@@ -8,4 +8,8 @@ export const Container = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 1.5rem 0;
+
+  .add-project-btn {
+    margin-right: 0.5rem;
+  }
 `;

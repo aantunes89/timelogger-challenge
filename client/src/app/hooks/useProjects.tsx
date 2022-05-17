@@ -6,10 +6,9 @@ import React, {
   useEffect,
 } from "react";
 import { Project } from "../models/Project";
-import { getEntries } from "../services/storageService";
-import { setupProjectPayload } from "../services/projectFormatterService";
+
 import { useScreenState } from "./useScreenState";
-import { axiosApiService } from "../api/projects";
+import { getAllProjects } from "../api/projects";
 ("../api/projects.ts");
 
 interface ProjectsProviderProps {
@@ -20,6 +19,7 @@ interface ProjectContextData {
   projects: Project[];
   projectId: number | null;
   setProjectId: (id: number) => void;
+  sortByDeadLine: () => void;
 }
 
 const ProjectsContext = createContext<ProjectContextData>(
@@ -34,11 +34,19 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
 
   async function fetchProjects() {
     try {
-      const { data } = await axiosApiService.get<Project[]>("/projects");
-      updateProjectsPayload(data);
+      const { projects: newProjects } = await getAllProjects();
+      setProjects([...newProjects]);
     } catch (error) {
       console.log("Show Error");
     }
+  }
+
+  function sortByDeadLine() {
+    const sortedProjects = projects.sort(
+      (a, b) => new Date(a.deadLine).getTime() - new Date(b.deadLine).getTime()
+    );
+
+    setProjects([...sortedProjects]);
   }
 
   useEffect((): void => {
@@ -46,17 +54,13 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     setShouldUpdate(false);
   }, [shouldUpdate, setShouldUpdate]);
 
-  function updateProjectsPayload(projects: Project[]) {
-    const newProjectList = setupProjectPayload(projects);
-    setProjects(newProjectList);
-  }
-
   return (
     <ProjectsContext.Provider
       value={{
         projects,
         projectId,
         setProjectId,
+        sortByDeadLine,
       }}
     >
       {children}

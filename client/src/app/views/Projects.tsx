@@ -9,10 +9,13 @@ import { Container } from "./styles";
 
 import { useScreenState } from "../hooks/useScreenState";
 import { NewProjectModal } from "../components/NewProjectModal/NewProjectModal";
+import { useProjects } from "../hooks/useProjects";
 
 export default function Projects() {
   const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } =
     useScreenState();
+
+  const { sortByDeadLine } = useProjects();
 
   return (
     <>
@@ -22,8 +25,17 @@ export default function Projects() {
             size="large"
             variant="contained"
             onClick={() => setProjectModalOpen(true)}
+            className="add-project-btn"
           >
             Add Project
+          </Button>
+
+          <Button
+            size="large"
+            variant="outlined"
+            onClick={() => sortByDeadLine()}
+          >
+            Prioritize
           </Button>
         </Box>
         <Box>
