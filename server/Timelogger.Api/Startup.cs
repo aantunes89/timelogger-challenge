@@ -81,7 +81,7 @@ namespace Timelogger.Api
 			var testProject2 = new Project
 			{
 				Id = 2,
-				Name = "Project 2dsadsadasd",
+				Name = "Project 2",
 				DeadLine = new DateTime(2023, 4, 9)
 			};
 
