@@ -5,11 +5,12 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import { getAll } from "../api/projects";
 import { Project } from "../models/Project";
 import { getEntries } from "../services/storageService";
 import { setupProjectPayload } from "../services/projectFormatterService";
 import { useScreenState } from "./useScreenState";
+import { axiosApiService } from "../api/projects";
+("../api/projects.ts");
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -31,25 +32,22 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
 
   const { shouldUpdate, setShouldUpdate } = useScreenState();
 
-  useEffect((): void => {
-    if (shouldUpdate) {
-      const getProjects = async () => {
-        try {
-          await getAll().then((data) => updateProjectsPayload(data));
-        } catch (error) {
-          console.log("Show Error");
-        }
-      };
-
-      getProjects();
+  async function fetchProjects() {
+    try {
+      const { data } = await axiosApiService.get<Project[]>("/projects");
+      updateProjectsPayload(data);
+    } catch (error) {
+      console.log("Show Error");
     }
+  }
 
+  useEffect((): void => {
+    shouldUpdate && fetchProjects();
     setShouldUpdate(false);
   }, [shouldUpdate, setShouldUpdate]);
 
   function updateProjectsPayload(projects: Project[]) {
-    const entries = getEntries();
-    const newProjectList = setupProjectPayload(projects, entries);
+    const newProjectList = setupProjectPayload(projects);
     setProjects(newProjectList);
   }
 

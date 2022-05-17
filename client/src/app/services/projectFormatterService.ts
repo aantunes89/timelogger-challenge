@@ -1,7 +1,10 @@
 import { Entry } from "../models/Entry";
 import { Project } from "../models/Project";
+import { getEntries } from "./storageService";
 
-export function setupProjectPayload(projects: Project[], entries: Entry[]) {
+export function setupProjectPayload(projects: Project[]): Project[] {
+  const entries: Entry[] = getEntries();
+
   return projects.map((project) => {
     const projectEntries = entries.filter(
       ({ projectId }) => projectId === project.id
