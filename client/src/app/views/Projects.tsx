@@ -11,17 +11,18 @@ import { useScreenState } from "../hooks/useScreenState";
 import { NewProjectModal } from "../components/NewProjectModal/NewProjectModal";
 
 export default function Projects() {
-  const { isModalOpen, setModalOpen } = useScreenState();
-
-  function handleCloseNewEntryModal() {
-    setModalOpen(false);
-  }
+  const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } =
+    useScreenState();
 
   return (
     <>
       <Container>
         <Box>
-          <Button size="large" variant="contained">
+          <Button
+            size="large"
+            variant="contained"
+            onClick={() => setProjectModalOpen(true)}
+          >
             Add Project
           </Button>
         </Box>
@@ -41,12 +42,12 @@ export default function Projects() {
 
       <NewEntryModal
         isOpen={isModalOpen}
-        onRequestClose={handleCloseNewEntryModal}
+        onRequestClose={() => setModalOpen(false)}
       />
 
       <NewProjectModal
-        isOpen={false}
-        onRequestClose={handleCloseNewEntryModal}
+        isOpen={isProjectModalOpen}
+        onRequestClose={() => setProjectModalOpen(false)}
       />
 
       <Table />
