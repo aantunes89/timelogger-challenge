@@ -37,28 +37,6 @@ export const Container = styled.form`
     }
   }
 
-  /* button[type="submit"],
-  button.cancel {
-    width: 100%;
-    height: 4rem;
-
-    padding: 0 1.5rem;
-    margin-top: 1.5rem;
-    border-radius: 0.25rem;
-    border: 0;
-
-    background-color: var(--green);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-
-    transition: filter 0.4s;
-
-    &:hover {
-      filter: brightness(0.9);
-    }
-  } */
-
   footer {
     display: flex;
     align-items: center;
