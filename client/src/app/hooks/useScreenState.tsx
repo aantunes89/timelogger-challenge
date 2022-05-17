@@ -10,6 +10,8 @@ interface ScreenStateContextData {
   setModalOpen: (value: boolean) => void;
   shouldUpdate: boolean;
   setShouldUpdate: (value: boolean) => void;
+  isProjectModalOpen: boolean;
+  setProjectModalOpen: (value: boolean) => void;
 }
 
 const ScreenStateContext = createContext<ScreenStateContextData>(
@@ -19,6 +21,7 @@ const ScreenStateContext = createContext<ScreenStateContextData>(
 export function ScreenStateProvider({ children }: ScreenStateProviderProps) {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [shouldUpdate, setShouldUpdate] = useState<boolean>(true);
+  const [isProjectModalOpen, setProjectModalOpen] = useState<boolean>(false);
 
   return (
     <ScreenStateContext.Provider
@@ -27,6 +30,8 @@ export function ScreenStateProvider({ children }: ScreenStateProviderProps) {
         setModalOpen,
         shouldUpdate,
         setShouldUpdate,
+        isProjectModalOpen,
+        setProjectModalOpen,
       }}
     >
       <ProjectsProvider children={children} />
