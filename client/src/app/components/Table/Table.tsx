@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
 
@@ -17,6 +17,7 @@ import {
   Typography,
   Button,
   Grid,
+  TablePagination,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -25,6 +26,13 @@ import { ContentContainer } from "./styles";
 export default function Table() {
   const { projects, setProjectId } = useProjects();
   const { setModalOpen } = useScreenState();
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
   function addEntry(projectId: number) {
     setProjectId(projectId);
@@ -83,22 +91,39 @@ export default function Table() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {project.entries.map((entry) => (
-                    <TableRow
-                      key={entry.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {entry.taskDescription}
-                      </TableCell>
-                      <TableCell align="center">{entry.timeSpent}h</TableCell>
-                      <TableCell align="center">${entry.hourlyPrice}</TableCell>
-                      <TableCell align="center">${entry.totalPrice}</TableCell>
-                    </TableRow>
-                  ))}
+                  {project.entries
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((entry) => (
+                      <TableRow
+                        key={entry.id}
+                        hover
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {entry.taskDescription}
+                        </TableCell>
+                        <TableCell align="center">{entry.timeSpent}h</TableCell>
+                        <TableCell align="center">
+                          ${entry.hourlyPrice}
+                        </TableCell>
+                        <TableCell align="center">
+                          ${entry.totalPrice}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </DataTable>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5]}
+              component="div"
+              count={project.entries.length}
+              rowsPerPage={5}
+              page={page > 0 && project.entries.length < rowsPerPage ? 0 : page}
+              onPageChange={handleChangePage}
+            />
 
             <Button
               style={{ marginTop: "2rem" }}
