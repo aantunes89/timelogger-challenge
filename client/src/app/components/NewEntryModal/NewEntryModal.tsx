@@ -122,6 +122,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
               variant="outlined"
               type="button"
               className="cancel"
+              onClick={onRequestClose}
             >
               Cancel
             </Button>
