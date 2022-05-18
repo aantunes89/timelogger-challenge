@@ -101,11 +101,11 @@ export default function Table() {
                         }}
                       >
                         <TableCell component="th" scope="row">
-                          {entry.taskDescription}
+                          {entry.description}
                         </TableCell>
                         <TableCell align="center">{entry.timeSpent}h</TableCell>
                         <TableCell align="center">
-                          ${entry.hourlyPrice}
+                          ${entry.hourlyRate}
                         </TableCell>
                         <TableCell align="center">
                           ${entry.totalPrice}
