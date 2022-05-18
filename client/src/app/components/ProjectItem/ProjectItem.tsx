@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Grid,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ContentContainer } from "./styles";
@@ -23,19 +24,32 @@ export function ProjectItem({ project, children }: ProjectItemProps) {
         expandIcon={<ExpandMoreIcon />}
       >
         <ContentContainer>
-          <Typography style={{ marginRight: 8 }}>
-            <label>Project Name</label> {project?.name}
-          </Typography>
-
-          <Typography>
-            <label>Deadline</label>
-            {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
-          </Typography>
-
-          <Typography>
-            <label>Current Price</label>
-            {`$${project?.totalPrice}`}
-          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <Typography className="truncate">
+                <label>Name</label>
+                {project?.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography>
+                <label>Deadline</label>
+                {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography>
+                <label>Total Price</label>
+                {`$${project?.totalPrice}`}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography>
+                <label>Total Work Time</label>
+                {`${project?.totalTimeSpent}h`}
+              </Typography>
+            </Grid>
+          </Grid>
         </ContentContainer>
       </AccordionSummary>
 
