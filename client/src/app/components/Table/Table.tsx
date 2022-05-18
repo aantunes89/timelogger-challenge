@@ -30,10 +30,6 @@ export default function Table() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
   function addEntry(projectId: number) {
     setProjectId(projectId);
     setModalOpen(true);
@@ -92,7 +88,10 @@ export default function Table() {
                 </TableHead>
                 <TableBody>
                   {project.entries
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                     .map((entry) => (
                       <TableRow
                         key={entry.id}
@@ -117,12 +116,15 @@ export default function Table() {
               </DataTable>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[5]}
+              rowsPerPageOptions={[5, 10]}
               component="div"
               count={project.entries.length}
               rowsPerPage={5}
               page={page > 0 && project.entries.length < rowsPerPage ? 0 : page}
-              onPageChange={handleChangePage}
+              onPageChange={(e, newPage) => setPage(newPage)}
+              onRowsPerPageChange={(event) =>
+                setRowsPerPage(Number.parseInt(event.target.value))
+              }
             />
 
             <Button
