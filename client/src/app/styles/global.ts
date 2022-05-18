@@ -26,6 +26,10 @@ export const GlobalStyle = createGlobalStyle`
 		}
 	}
 
+	body {
+		-webket-font-smoothing: antialiased;
+	}
+
 
 	body, input, text-area, button, p {
 		font-family: 'Roboto', sans-serif;

@@ -30,10 +30,12 @@ export function NewProjectModal(props: NewEntryModalProps) {
 
     const projectDeadLine = deadLine ? deadLine : new Date(Date.now());
 
-    await axiosApiService.post<Project>("/projects", {
-      name: projectName,
-      deadLine: projectDeadLine.toISOString(),
-    });
+    await axiosApiService
+      .post<Project>("/projects", {
+        name: projectName,
+        deadLine: projectDeadLine.toISOString(),
+      })
+      .catch((error) => console.error(error));
 
     resetState();
     setShouldUpdate(true);
@@ -49,7 +51,7 @@ export function NewProjectModal(props: NewEntryModalProps) {
     <CustomModal
       title="New Project"
       isOpen={isOpen}
-      disabled={true}
+      disabled={deadLine && projectName ? false : true}
       onRequestClose={onRequestClose}
       onSubmit={(e) => onSaveProject(e)}
     >
