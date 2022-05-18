@@ -89,7 +89,7 @@ namespace Timelogger.Api
 			{
 				Id = 3,
 				Name = "Project 3",
-				DeadLine = new DateTime(2023, 4, 9)
+				DeadLine = new DateTime(2021, 4, 9)
 			};
 
 			context.Projects.Add(testProject1);
