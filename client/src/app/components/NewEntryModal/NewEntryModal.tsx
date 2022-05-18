@@ -13,7 +13,7 @@ interface NewEntryModalProps {
 
 export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   const { projectId } = useProjects();
-  const { setShouldUpdate } = useScreenState();
+  const { setShouldUpdate, setShowSnackBar, setSnackBarMsg } = useScreenState();
 
   const [description, setDescription] = useState<string>("");
   const [timeSpent, setTimeSpent] = useState<number>(0);
@@ -42,6 +42,8 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
 
     resetState();
     setShouldUpdate(true);
+    setShowSnackBar(true);
+    setSnackBarMsg("Successfully Saved");
   }
 
   function resetState() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField, Box } from "@mui/material";
+import { Button, TextField, Box, Snackbar } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import Table from "../components/Table/Table";
@@ -10,10 +10,10 @@ import { Container } from "./styles";
 import { useScreenState } from "../hooks/useScreenState";
 import { NewProjectModal } from "../components/NewProjectModal/NewProjectModal";
 import { useProjects } from "../hooks/useProjects";
+import { CustomSnackBar } from "../components/CustomSnackBar/CustomSnackBar";
 
 export default function Projects() {
-  const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } =
-    useScreenState();
+  const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } = useScreenState();
 
   const { sortByDeadLine } = useProjects();
 
@@ -30,11 +30,7 @@ export default function Projects() {
             Add Project
           </Button>
 
-          <Button
-            size="large"
-            variant="outlined"
-            onClick={() => sortByDeadLine()}
-          >
+          <Button size="large" variant="outlined" onClick={() => sortByDeadLine()}>
             Prioritize
           </Button>
         </Box>
@@ -53,15 +49,14 @@ export default function Projects() {
         </Box>
       </Container>
 
-      <NewEntryModal
-        isOpen={isModalOpen}
-        onRequestClose={() => setModalOpen(false)}
-      />
+      <NewEntryModal isOpen={isModalOpen} onRequestClose={() => setModalOpen(false)} />
 
       <NewProjectModal
         isOpen={isProjectModalOpen}
         onRequestClose={() => setProjectModalOpen(false)}
       />
+
+      <CustomSnackBar />
 
       <Table />
     </>

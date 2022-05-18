@@ -20,7 +20,7 @@ interface NewEntryModalProps {
 
 export function NewProjectModal(props: NewEntryModalProps) {
   const { isOpen, onRequestClose } = props;
-  const { setShouldUpdate } = useScreenState();
+  const { setShouldUpdate, setShowSnackBar, setSnackBarMsg } = useScreenState();
 
   const [projectName, setProjectName] = useState<string>("");
   const [deadLine, setDeadLine] = useState<Date | null>(null);
@@ -35,10 +35,12 @@ export function NewProjectModal(props: NewEntryModalProps) {
         name: projectName,
         deadLine: projectDeadLine.toISOString(),
       })
-      .catch((error) => console.error(error));
+      .then(() => setSnackBarMsg("Successfully saved"))
+      .catch((error) => setSnackBarMsg("Couldn't add Project"));
 
     resetState();
     setShouldUpdate(true);
+    setShowSnackBar(true);
     onRequestClose();
   }
 
