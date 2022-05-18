@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
-import App from "./App";
-import Projects from "./views/Projects";
+import App from "../App";
+import Projects from "../views/Projects";
 
 describe("App Component", () => {
   it("should render all elements of AppBar", () => {
