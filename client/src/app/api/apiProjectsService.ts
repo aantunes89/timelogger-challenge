@@ -12,7 +12,8 @@ axiosApiService.interceptors.response.use(
   (response) => {
     const { config } = response;
 
-    if (config.url == "/projects") {
+    // debugger;
+    if (config.url == "/projects" && response.data) {
       response.data = setupProjectPayload(response.data);
     }
 

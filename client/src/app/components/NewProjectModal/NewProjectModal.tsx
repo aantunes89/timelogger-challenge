@@ -32,20 +32,21 @@ export function NewProjectModal({
   const [projectName, setProjectName] = useState<string>("");
   const [deadLine, setDeadLine] = useState<Date | null>(null);
 
-  function onSaveProject(event: NewEntrySubmitEvent) {
+  async function onSaveProject(event: NewEntrySubmitEvent) {
     event.preventDefault();
 
     const projectDeadLine = deadLine
       ? deadLine.toISOString()
       : new Date(Date.now()).toISOString();
 
-    axiosApiService.post<Project>("/projects", {
+    await axiosApiService.post<Project>("/projects", {
       name: projectName,
       deadLine: projectDeadLine,
     });
 
     resetState();
     setShouldUpdate(true);
+    onRequestClose();
   }
 
   function resetState() {
