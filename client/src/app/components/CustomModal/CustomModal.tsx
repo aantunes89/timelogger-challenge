@@ -13,6 +13,7 @@ interface CustomModalProps {
   children: ReactNode;
   onRequestClose: () => void;
   onSubmit: (event: FormSubmitEvent) => Promise<void>;
+  totalPrice?: number;
 }
 
 export function CustomModal(props: CustomModalProps) {
@@ -26,15 +27,14 @@ export function CustomModal(props: CustomModalProps) {
     >
       <Container>
         <h2>{props.title}</h2>
-        <CloseIcon
-          className="react-modal-close"
-          onClick={props.onRequestClose}
-        />
+        <CloseIcon className="react-modal-close" onClick={props.onRequestClose} />
 
         {children}
 
         <footer>
-          <div className="total-description"></div>
+          <div className="total-description">
+            {props.totalPrice ? <label>Total: ${props.totalPrice}</label> : null}
+          </div>
 
           <div className="action-buttons__wrapper">
             <Button

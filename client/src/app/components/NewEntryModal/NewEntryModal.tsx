@@ -21,15 +21,10 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   useEffect(() => {
-    timeSpent && hourlyRate
-      ? setTotalPrice(timeSpent * hourlyRate)
-      : setTotalPrice(0);
+    timeSpent && hourlyRate ? setTotalPrice(timeSpent * hourlyRate) : setTotalPrice(0);
   }, [timeSpent, hourlyRate]);
 
-  function handleInputNumber(
-    { target: { value } }: FormInputEvent,
-    cb: (val: number) => void
-  ) {
+  function handleInputNumber({ target: { value } }: FormInputEvent, cb: (val: number) => void) {
     const newVal = value ? Number.parseInt(value) : 0;
     return cb(newVal);
   }
@@ -62,6 +57,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
       title="New Entry"
       disabled={totalPrice ? false : true}
       onSubmit={(e) => onSaveEntry(e)}
+      totalPrice={totalPrice}
     >
       <>
         <div className="form-field">
