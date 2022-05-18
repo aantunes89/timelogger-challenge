@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Container } from "./styles";
 
-import closeSvg from "../../assets/close.svg";
+// import closeSvg from "../../assets/close.svg";
 
 import { storeEntry } from "../../services/storageService";
 import { useProjects } from "../../hooks/useProjects";
 import { Button } from "@mui/material";
 import { useScreenState } from "../../hooks/useScreenState";
 
-Modal.setAppElement("#root");
+if (process.env.NODE_ENV !== "test") Modal.setAppElement("#root");
 
 type NewEntryInputEvent = React.ChangeEvent<HTMLInputElement>;
 type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -79,7 +79,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
           className="react-modal-close"
           onClick={onRequestClose}
         >
-          <img src={closeSvg} alt="close btn" />
+          {/* <img src={closeSvg} alt="close btn" /> */}x
         </button>
 
         <div className="form-field">

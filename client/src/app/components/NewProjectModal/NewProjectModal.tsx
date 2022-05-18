@@ -7,14 +7,14 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Button, Stack, TextField } from "@mui/material";
 import DatePicker from "@mui/lab/DatePicker";
 
-import closeSvg from "../../assets/close.svg";
+// import closeSvg from "../../assets/close.svg";
 
 import { Project } from "../../models/Project";
 
 import { useScreenState } from "../../hooks/useScreenState";
 import { axiosApiService } from "../../api/apiProjectsService";
 
-Modal.setAppElement("#root");
+if (process.env.NODE_ENV !== "test") Modal.setAppElement("#root");
 
 type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -68,7 +68,7 @@ export function NewProjectModal({
           className="react-modal-close"
           onClick={onRequestClose}
         >
-          <img src={closeSvg} alt="close btn" />
+          {/* <img src={closeSvg} alt="close btn" /> */}x
         </button>
 
         <div className="form-field">
