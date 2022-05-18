@@ -37,7 +37,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
 
       setProjects([...data]);
     } catch (error) {
-      console.log("Show Error");
+      return error;
     }
   }
 
