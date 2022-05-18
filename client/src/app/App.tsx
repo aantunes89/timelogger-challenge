@@ -10,17 +10,22 @@ export default function App() {
     <ScreenStateProvider>
       <GlobalStyle />
 
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1 }} data-testid="header-wrapper">
+        <AppBar position="static" data-testid="app-bar">
+          <Toolbar data-testid="tool-bar">
+            <Typography
+              data-testid="typography-header"
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+            >
               Timelogger
             </Typography>
           </Toolbar>
         </AppBar>
       </Box>
 
-      <Box sx={{ flexGrow: 1 }} padding={4}>
+      <Box sx={{ flexGrow: 1 }} padding={4} data-testid="body-wrapper">
         <Projects />
       </Box>
     </ScreenStateProvider>
