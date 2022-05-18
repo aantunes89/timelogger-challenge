@@ -83,6 +83,7 @@ export const GlobalStyle = createGlobalStyle`
 		border: 0;
 		background-color: transparent;
 		border-radius: 50%;
+		cursor: pointer;
 
 		transition: filter .3s;
 		

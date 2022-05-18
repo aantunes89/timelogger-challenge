@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
-import { Container } from "./styles";
 
-// import closeSvg from "../../assets/close.svg";
-
-import { storeEntry } from "../../services/storageService";
 import { useProjects } from "../../hooks/useProjects";
-import { Button } from "@mui/material";
 import { useScreenState } from "../../hooks/useScreenState";
-
-if (process.env.NODE_ENV !== "test") Modal.setAppElement("#root");
-
-type NewEntryInputEvent = React.ChangeEvent<HTMLInputElement>;
-type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
+import { storeEntry } from "../../services/storageService";
+import { CustomModal } from "../CustomModal/CustomModal";
+import { FormSubmitEvent, FormInputEvent } from "../../types/FormEvents";
 
 interface NewEntryModalProps {
   isOpen: boolean;
@@ -21,7 +13,6 @@ interface NewEntryModalProps {
 
 export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   const { projectId } = useProjects();
-
   const { setShouldUpdate } = useScreenState();
 
   const [description, setDescription] = useState<string>("");
@@ -36,22 +27,21 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   }, [timeSpent, hourlyRate]);
 
   function handleInputNumber(
-    { target }: NewEntryInputEvent,
+    { target: { value } }: FormInputEvent,
     cb: (val: number) => void
   ) {
-    const { value } = target;
     const newVal = value ? Number.parseInt(value) : 0;
     return cb(newVal);
   }
 
-  function onSaveEntry(event: NewEntrySubmitEvent) {
+  async function onSaveEntry(event: FormSubmitEvent) {
     event.preventDefault();
 
     storeEntry({
       projectId,
-      taskDescription: description,
+      description,
       timeSpent,
-      hourlyPrice: hourlyRate,
+      hourlyRate,
       totalPrice,
     });
 
@@ -66,22 +56,14 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   }
 
   return (
-    <Modal
+    <CustomModal
       isOpen={isOpen}
-      overlayClassName="react-modal-overlay"
-      className="react-modal-content"
       onRequestClose={onRequestClose}
+      title="New Entry"
+      disabled={totalPrice ? false : true}
+      onSubmit={(e) => onSaveEntry(e)}
     >
-      <Container>
-        <h2>New Entry</h2>
-        <button
-          type="button"
-          className="react-modal-close"
-          onClick={onRequestClose}
-        >
-          {/* <img src={closeSvg} alt="close btn" /> */}x
-        </button>
-
+      <>
         <div className="form-field">
           <label>Task Description</label>
           <input
@@ -110,35 +92,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
             onChange={(e) => handleInputNumber(e, setHourlyRate)}
           />
         </div>
-
-        <footer>
-          <div className="total-description">
-            {totalPrice ? <label>Total: ${totalPrice}</label> : null}
-          </div>
-
-          <div className="action-buttons__wrapper">
-            <Button
-              size="large"
-              variant="outlined"
-              type="button"
-              className="cancel"
-              onClick={onRequestClose}
-            >
-              Cancel
-            </Button>
-
-            <Button
-              size="large"
-              variant="contained"
-              disabled={totalPrice ? false : true}
-              type="submit"
-              onClick={(e) => onSaveEntry(e)}
-            >
-              Save Entry
-            </Button>
-          </div>
-        </footer>
-      </Container>
-    </Modal>
+      </>
+    </CustomModal>
   );
 }

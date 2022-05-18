@@ -1,47 +1,38 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
-import { Container } from "./styles";
 
+import { Stack, TextField } from "@mui/material";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { Button, Stack, TextField } from "@mui/material";
 import DatePicker from "@mui/lab/DatePicker";
-
-// import closeSvg from "../../assets/close.svg";
-
-import { Project } from "../../models/Project";
 
 import { useScreenState } from "../../hooks/useScreenState";
 import { axiosApiService } from "../../api/apiProjectsService";
 
-if (process.env.NODE_ENV !== "test") Modal.setAppElement("#root");
+import { Project } from "../../models/Project";
+import { FormSubmitEvent } from "../../types/FormEvents";
 
-type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
+import { CustomModal } from "../CustomModal/CustomModal";
 
 interface NewEntryModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
 }
 
-export function NewProjectModal({
-  isOpen,
-  onRequestClose,
-}: NewEntryModalProps) {
+export function NewProjectModal(props: NewEntryModalProps) {
+  const { isOpen, onRequestClose } = props;
   const { setShouldUpdate } = useScreenState();
 
   const [projectName, setProjectName] = useState<string>("");
   const [deadLine, setDeadLine] = useState<Date | null>(null);
 
-  async function onSaveProject(event: NewEntrySubmitEvent) {
+  async function onSaveProject(event: FormSubmitEvent) {
     event.preventDefault();
 
-    const projectDeadLine = deadLine
-      ? deadLine.toISOString()
-      : new Date(Date.now()).toISOString();
+    const projectDeadLine = deadLine ? deadLine : new Date(Date.now());
 
     await axiosApiService.post<Project>("/projects", {
       name: projectName,
-      deadLine: projectDeadLine,
+      deadLine: projectDeadLine.toISOString(),
     });
 
     resetState();
@@ -55,22 +46,14 @@ export function NewProjectModal({
   }
 
   return (
-    <Modal
+    <CustomModal
+      title="New Project"
       isOpen={isOpen}
-      overlayClassName="react-modal-overlay"
-      className="react-modal-content"
+      disabled={true}
       onRequestClose={onRequestClose}
+      onSubmit={(e) => onSaveProject(e)}
     >
-      <Container>
-        <h2>New Project</h2>
-        <button
-          type="button"
-          className="react-modal-close"
-          onClick={onRequestClose}
-        >
-          {/* <img src={closeSvg} alt="close btn" /> */}x
-        </button>
-
+      <>
         <div className="form-field">
           <label>Project Name</label>
           <input
@@ -92,33 +75,7 @@ export function NewProjectModal({
             </Stack>
           </LocalizationProvider>
         </div>
-
-        <footer>
-          <div className="total-description"></div>
-
-          <div className="action-buttons__wrapper">
-            <Button
-              size="large"
-              variant="outlined"
-              type="button"
-              className="cancel"
-              onClick={onRequestClose}
-            >
-              Cancel
-            </Button>
-
-            <Button
-              size="large"
-              variant="contained"
-              disabled={deadLine && projectName ? false : true}
-              type="submit"
-              onClick={(e) => onSaveProject(e)}
-            >
-              Save Project
-            </Button>
-          </div>
-        </footer>
-      </Container>
-    </Modal>
+      </>
+    </CustomModal>
   );
 }
