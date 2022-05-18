@@ -4,9 +4,24 @@ import { setupProjectPayload } from "../services/projectFormatterService";
 
 const BASE_URL = "http://localhost:3001/api";
 
-export const axiosApiService = axios.create({
+const axiosApiService = axios.create({
   baseURL: BASE_URL,
 });
+
+axiosApiService.interceptors.response.use(
+  (response) => {
+    const { config } = response;
+
+    if (config.url == "/projects") {
+      response.data = setupProjectPayload(response.data);
+    }
+
+    return response;
+  },
+  (error) => error
+);
+
+export { axiosApiService };
 
 export async function getAllProjects(): Promise<{ projects: Project[] }> {
   return axiosApiService
@@ -17,7 +32,7 @@ export async function getAllProjects(): Promise<{ projects: Project[] }> {
     }));
 }
 
-export async function addProjec(project: Partial<Project>) {
+export async function addProject(project: Partial<Project>) {
   return axiosApiService
     .post("/projects")
     .then(console.log)

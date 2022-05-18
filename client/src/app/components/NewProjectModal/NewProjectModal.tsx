@@ -9,13 +9,13 @@ import DatePicker from "@mui/lab/DatePicker";
 
 import closeSvg from "../../assets/close.svg";
 
-import { useScreenState } from "../../hooks/useScreenState";
-import { axiosApiService } from "../../api/projects";
 import { Project } from "../../models/Project";
+
+import { useScreenState } from "../../hooks/useScreenState";
+import { axiosApiService } from "../../api/apiProjectsService";
 
 Modal.setAppElement("#root");
 
-type NewEntryInputEvent = React.ChangeEvent<HTMLInputElement>;
 type NewEntrySubmitEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 interface NewEntryModalProps {
@@ -37,14 +37,12 @@ export function NewProjectModal({
 
     const projectDeadLine = deadLine
       ? deadLine.toISOString()
-      : new Date(Date.now());
+      : new Date(Date.now()).toISOString();
 
-    axiosApiService
-      .post<Project>("/projects", {
-        name: projectName,
-        deadLine: projectDeadLine,
-      })
-      .then(console.log);
+    axiosApiService.post<Project>("/projects", {
+      name: projectName,
+      deadLine: projectDeadLine,
+    });
 
     resetState();
     setShouldUpdate(true);
@@ -82,11 +80,10 @@ export function NewProjectModal({
         </div>
 
         <div className="form-field">
-          <label>Time Spent</label>
+          <label>Deadline</label>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={4} sx={{ width: "100%" }}>
               <DatePicker
-                label="Deadline"
                 renderInput={(params) => <TextField {...params} />}
                 value={deadLine}
                 onChange={(newValue) => setDeadLine(newValue)}
@@ -104,6 +101,7 @@ export function NewProjectModal({
               variant="outlined"
               type="button"
               className="cancel"
+              onClick={onRequestClose}
             >
               Cancel
             </Button>

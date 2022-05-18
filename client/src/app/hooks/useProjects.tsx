@@ -8,8 +8,7 @@ import React, {
 import { Project } from "../models/Project";
 
 import { useScreenState } from "./useScreenState";
-import { getAllProjects } from "../api/projects";
-("../api/projects.ts");
+import { axiosApiService } from "../api/apiProjectsService";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -34,8 +33,9 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
 
   async function fetchProjects() {
     try {
-      const { projects: newProjects } = await getAllProjects();
-      setProjects([...newProjects]);
+      const { data } = await axiosApiService.get<Project[]>("/projects");
+
+      setProjects([...data]);
     } catch (error) {
       console.log("Show Error");
     }
