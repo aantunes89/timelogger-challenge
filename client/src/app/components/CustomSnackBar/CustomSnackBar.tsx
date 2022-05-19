@@ -7,11 +7,7 @@ export function CustomSnackBar() {
   const { showSnackBar, setShowSnackBar, snackBarMsg } = useScreenState();
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setShowSnackBar(false);
+    reason !== "clickaway" && setShowSnackBar(false);
   };
 
   const action = (
