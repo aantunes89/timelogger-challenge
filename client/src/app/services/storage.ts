@@ -30,10 +30,6 @@ export function getEntries(): Entry[] {
   return [];
 }
 
-export function storeSeed(project: Project[]): void {
-  localStorage.setItem(StorageKeys.SEED, JSON.stringify(project));
-}
-
 export function storeListOfEntries(entries: Entry[]): void {
   localStorage.setItem(StorageKeys.ENTRIES, JSON.stringify(entries));
 }
