@@ -4,7 +4,7 @@ import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
 import { storeEntry } from "../../services/storage";
 import { CustomModal } from "../CustomModal/CustomModal";
-import { FormSubmitEvent, FormInputEvent } from "../../types/FormEvents";
+import { FormSubmitEvent } from "../../types/FormEvents";
 
 interface NewEntryModalProps {
   isOpen: boolean;
@@ -23,11 +23,6 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
   useEffect(() => {
     timeSpent && hourlyRate ? setTotalPrice(timeSpent * hourlyRate) : setTotalPrice(0);
   }, [timeSpent, hourlyRate]);
-
-  function handleInputNumber({ target: { value } }: FormInputEvent, cb: (val: number) => void) {
-    const newVal = value ? Number.parseInt(value) : 0;
-    return cb(newVal);
-  }
 
   async function onSaveEntry(event: FormSubmitEvent) {
     event.preventDefault();
@@ -77,7 +72,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
             type="number"
             min={0}
             value={timeSpent}
-            onChange={(e) => handleInputNumber(e, setTimeSpent)}
+            onChange={(e) => setTimeSpent(Number.parseInt(e.target.value))}
           />
         </div>
 
@@ -87,7 +82,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
             type="number"
             min={0}
             value={hourlyRate}
-            onChange={(e) => handleInputNumber(e, setHourlyRate)}
+            onChange={(e) => setHourlyRate(Number.parseInt(e.target.value))}
           />
         </div>
       </>

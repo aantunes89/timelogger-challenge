@@ -3,7 +3,6 @@ import { NewProjectModal } from "../../components/NewProjectModal/NewProjectModa
 import Projects from "../../views/Projects";
 import Modal from "react-modal";
 import { NewEntryModal } from "../../components/NewEntryModal/NewEntryModal";
-import { useState } from "react";
 
 describe("Projects View - Rendered Components", () => {
   it("should have an open modal button", () => {

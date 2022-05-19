@@ -6,9 +6,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 
 import { useScreenState } from "../../hooks/useScreenState";
-import { axiosApiService } from "../../api/projects";
 
-import { Project } from "../../models/Project";
 import { FormSubmitEvent } from "../../types/FormEvents";
 
 import { CustomModal } from "../CustomModal/CustomModal";
