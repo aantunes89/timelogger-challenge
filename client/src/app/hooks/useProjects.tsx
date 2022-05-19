@@ -1,14 +1,8 @@
-import React, {
-  createContext,
-  ReactNode,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import React, { createContext, ReactNode, useState, useContext, useEffect, ErrorInfo } from "react";
 import { Project } from "../models/Project";
 
 import { useScreenState } from "./useScreenState";
-import { axiosApiService } from "../api/apiProjectsService";
+import { axiosApiService } from "../api/projects";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -18,35 +12,36 @@ interface ProjectContextData {
   projects: Project[];
   projectId: number | null;
   setProjectId: (id: number) => void;
-  sortByDeadLine: () => void;
+  setProjects: (projects: Project[]) => void;
+  addProject: (project: Partial<Project>) => Promise<void>;
 }
 
-const ProjectsContext = createContext<ProjectContextData>(
-  {} as ProjectContextData
-);
+const ProjectsContext = createContext<ProjectContextData>({} as ProjectContextData);
 
 export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { shouldUpdate, setShouldUpdate } = useScreenState();
+  const { shouldUpdate, setShouldUpdate, setSnackBarMsg } = useScreenState();
 
-  async function fetchProjects() {
+  async function fetchProjects(): Promise<void> {
     try {
       const { data } = await axiosApiService.get<Project[]>("/projects");
 
       setProjects([...data]);
     } catch (error) {
-      return error;
+      setSnackBarMsg("Couldn't find any Project");
     }
   }
 
-  function sortByDeadLine() {
-    const sortedProjects = projects.sort(
-      (a, b) => new Date(a.deadLine).getTime() - new Date(b.deadLine).getTime()
-    );
-
-    setProjects([...sortedProjects]);
+  async function addProject({ name, deadLine: projectDeadLine }: Partial<Project>): Promise<void> {
+    await axiosApiService
+      .post<Project>("/projects", {
+        name,
+        deadLine: projectDeadLine?.toISOString(),
+      })
+      .then(() => setSnackBarMsg("Successfully saved"))
+      .catch(() => setSnackBarMsg("Couldn't add Project"));
   }
 
   useEffect((): void => {
@@ -60,7 +55,8 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         projects,
         projectId,
         setProjectId,
-        sortByDeadLine,
+        setProjects,
+        addProject,
       }}
     >
       {children}

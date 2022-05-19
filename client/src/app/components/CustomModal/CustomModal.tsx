@@ -12,7 +12,7 @@ interface CustomModalProps {
   disabled: boolean;
   children: ReactNode;
   onRequestClose: () => void;
-  onSubmit: (event: FormSubmitEvent) => Promise<void>;
+  onSubmit: (event: FormSubmitEvent) => void;
   totalPrice?: number;
 }
 

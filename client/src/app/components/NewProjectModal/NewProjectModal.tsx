@@ -6,12 +6,13 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 
 import { useScreenState } from "../../hooks/useScreenState";
-import { axiosApiService } from "../../api/apiProjectsService";
+import { axiosApiService } from "../../api/projects";
 
 import { Project } from "../../models/Project";
 import { FormSubmitEvent } from "../../types/FormEvents";
 
 import { CustomModal } from "../CustomModal/CustomModal";
+import { useProjects } from "../../hooks/useProjects";
 
 interface NewEntryModalProps {
   isOpen: boolean;
@@ -20,7 +21,8 @@ interface NewEntryModalProps {
 
 export function NewProjectModal(props: NewEntryModalProps) {
   const { isOpen, onRequestClose } = props;
-  const { setShouldUpdate, setShowSnackBar, setSnackBarMsg } = useScreenState();
+  const { setShouldUpdate, setShowSnackBar } = useScreenState();
+  const { addProject } = useProjects();
 
   const [projectName, setProjectName] = useState<string>("");
   const [deadLine, setDeadLine] = useState<Date | null>(null);
@@ -30,13 +32,7 @@ export function NewProjectModal(props: NewEntryModalProps) {
 
     const projectDeadLine = deadLine ? deadLine : new Date(Date.now());
 
-    await axiosApiService
-      .post<Project>("/projects", {
-        name: projectName,
-        deadLine: projectDeadLine.toISOString(),
-      })
-      .then(() => setSnackBarMsg("Successfully saved"))
-      .catch((error) => setSnackBarMsg("Couldn't add Project"));
+    await addProject({ deadLine: projectDeadLine, name: projectName });
 
     resetState();
     setShouldUpdate(true);

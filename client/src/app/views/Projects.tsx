@@ -1,10 +1,8 @@
 import React from "react";
-import { Button, TextField, Box, Snackbar } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Button, Box } from "@mui/material";
 
 import Table from "../components/Table/Table";
 import { NewEntryModal } from "../components/NewEntryModal/NewEntryModal";
-import { RoundButton } from "../components/RoundButton/styles";
 import { Container } from "./styles";
 
 import { useScreenState } from "../hooks/useScreenState";
@@ -15,7 +13,16 @@ import { CustomSnackBar } from "../components/CustomSnackBar/CustomSnackBar";
 export default function Projects() {
   const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } = useScreenState();
 
-  const { sortByDeadLine } = useProjects();
+  const { setProjects, projects } = useProjects();
+
+  function sortByDeadLine() {
+    const sortedProjects = projects.sort(
+      (prevProject, currProject) =>
+        new Date(prevProject.deadLine).getTime() - new Date(currProject.deadLine).getTime()
+    );
+
+    setProjects([...sortedProjects]);
+  }
 
   return (
     <>

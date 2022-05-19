@@ -1,7 +1,7 @@
 import { Entry } from "../models/Entry";
 import { Project } from "../models/Project";
 
-enum StorageKeys {
+export enum StorageKeys {
   ENTRIES = "ENTRIES",
   SEED = "SEED",
 }
@@ -34,6 +34,6 @@ export function storeSeed(project: Project[]): void {
   localStorage.setItem(StorageKeys.SEED, JSON.stringify(project));
 }
 
-export function storListOfEntries(entries: Entry[]): void {
+export function storeListOfEntries(entries: Entry[]): void {
   localStorage.setItem(StorageKeys.ENTRIES, JSON.stringify(entries));
 }

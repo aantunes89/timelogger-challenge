@@ -13,17 +13,7 @@ describe("Projects View - Rendered Components", () => {
 
   it("should have a prioritize button", () => {
     const { getByText } = render(<Projects />);
-    expect(getByText("Prioritize")).toBeInTheDocument();
-  });
-
-  it("should have a search button", () => {
-    const { getByRole } = render(<Projects />);
-    expect(getByRole("search-btn")).toBeInTheDocument();
-  });
-
-  it("should have a search field", () => {
-    const { getByRole } = render(<Projects />);
-    expect(getByRole("search-field")).toBeInTheDocument();
+    expect(getByText("Prioritise My Work")).toBeInTheDocument();
   });
 });
 
@@ -31,26 +21,14 @@ describe("Project - Test Modal Visibility", () => {
   Modal.setAppElement(document.createElement("div"));
 
   it("should render NewProjectModal", () => {
-    const { getByText } = render(
-      <NewProjectModal isOpen={true} onRequestClose={jest.fn()} />
-    );
+    const { getByText } = render(<NewProjectModal isOpen={true} onRequestClose={jest.fn()} />);
 
     expect(getByText("New Project")).toBeInTheDocument();
   });
 
   it("should render NewEntryModal", () => {
-    const { getByText } = render(
-      <NewEntryModal isOpen={true} onRequestClose={jest.fn()} />
-    );
+    const { getByText } = render(<NewEntryModal isOpen={true} onRequestClose={jest.fn()} />);
 
     expect(getByText("New Entry")).toBeInTheDocument();
   });
-
-  // it('should open modal', () => {
-  //   const [isOpen, setIsOpen] = useState(false)
-  //   const { getByText } = render(
-  //     <NewEntryModal isOpen={isOpen} onRequestClose={jest.fn()} />
-  //   );
-
-  // })
 });

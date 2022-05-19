@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
-import { storeEntry } from "../../services/storageService";
+import { storeEntry } from "../../services/storage";
 import { CustomModal } from "../CustomModal/CustomModal";
 import { FormSubmitEvent, FormInputEvent } from "../../types/FormEvents";
 

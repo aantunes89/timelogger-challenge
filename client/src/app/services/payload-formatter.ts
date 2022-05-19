@@ -1,14 +1,10 @@
 import { Entry } from "../models/Entry";
 import { Project } from "../models/Project";
-import { getEntries, storListOfEntries } from "./storageService";
+import { storeListOfEntries } from "./storage";
 
-export function setupProjectPayload(projects: Project[]): Project[] {
-  const entries: Entry[] = getEntries();
-
+export function setupProjectPayload(projects: Project[], entries: Entry[]): Project[] {
   const projectsWithEntries = projects.map((project) => {
-    const projectEntries = entries.filter(
-      ({ projectId }) => projectId === project.id
-    );
+    const projectEntries = entries.filter(({ projectId }) => projectId === project.id);
 
     // set Entries
     project.entries = projectEntries ? [...projectEntries] : [];
@@ -30,7 +26,7 @@ export function setupProjectPayload(projects: Project[]): Project[] {
   return projectsWithEntries;
 }
 
-function refreshAndStorEntries(projects: Project[]) {
+export function refreshAndStorEntries(projects: Project[]) {
   const entries = projects?.map((project) => project.entries);
-  storListOfEntries(entries.flat());
+  storeListOfEntries(entries.flat());
 }
