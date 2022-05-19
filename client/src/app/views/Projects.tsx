@@ -31,21 +31,8 @@ export default function Projects() {
           </Button>
 
           <Button size="large" variant="outlined" onClick={() => sortByDeadLine()}>
-            Prioritize
+            Prioritise My Work
           </Button>
-        </Box>
-        <Box>
-          <TextField
-            role="search-field"
-            size="small"
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-          />
-
-          <RoundButton variant="contained" role="search-btn">
-            <SearchIcon />
-          </RoundButton>
         </Box>
       </Container>
 
