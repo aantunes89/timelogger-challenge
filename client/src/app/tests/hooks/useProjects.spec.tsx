@@ -16,7 +16,7 @@ const mockProjects: Project[] = [
     entries: [],
   },
 ];
-describe("", () => {
+describe("useProjects hooks", () => {
   beforeEach(() => {
     apiMock.reset();
   });
@@ -43,13 +43,4 @@ describe("", () => {
 
     expect(result.current.projectId).toEqual(1);
   });
-
-  // it("", () => {
-  //   const { result } = renderHook(() => useProjectsStateBuilder());
-  //   const body = { name: "A name", deadLine: new Date(Date.now()).toISOString };
-
-  //   apiMock.onPost("/projects", body);
-
-  //   expect(result.current.projects.length).toBeGreaterThan(1);
-  // });
 });
