@@ -21,17 +21,28 @@ interface ProjectContextData {
 
 const ProjectsContext = createContext<ProjectContextData>({} as ProjectContextData);
 
-export function ProjectsProvider({ children }: ProjectsProviderProps) {
+export const useProjectsStateBuilder = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { shouldUpdate, setShouldUpdate, setSnackBarMsg, setShowSnackBar } = useScreenState();
+  return {
+    projects,
+    projectId,
+    setProjectId,
+    setProjects,
+  };
+};
+
+export function ProjectsProvider({ children }: ProjectsProviderProps) {
+  const projectsState = useProjectsStateBuilder();
+
+  const { shouldUpdate, setShouldUpdate, setSnackBarMsg } = useScreenState();
 
   async function fetchProjects(): Promise<void> {
     try {
       const { data } = await axiosApiService.get<Project[]>("/projects");
 
-      setProjects([...data]);
+      projectsState.setProjects([...data]);
     } catch (error) {
       setSnackBarMsg("Couldn't find any Project");
     }
@@ -59,10 +70,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   return (
     <ProjectsContext.Provider
       value={{
-        projects,
-        projectId,
-        setProjectId,
-        setProjects,
+        ...projectsState,
         addProject,
         addEntry,
       }}
