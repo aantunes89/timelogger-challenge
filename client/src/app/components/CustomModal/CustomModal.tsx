@@ -12,7 +12,7 @@ interface CustomModalProps {
   disabled: boolean;
   children: ReactNode;
   onRequestClose: () => void;
-  onSubmit: (event: FormSubmitEvent) => void;
+  onSubmit: (event?: FormSubmitEvent) => void;
   totalPrice?: number;
 }
 
@@ -51,7 +51,7 @@ export function CustomModal(props: CustomModalProps) {
               size="large"
               variant="contained"
               disabled={props.disabled}
-              type="submit"
+              type="button"
               onClick={props.onSubmit}
             >
               Submit

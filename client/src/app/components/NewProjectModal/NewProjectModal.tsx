@@ -25,9 +25,7 @@ export function NewProjectModal(props: NewEntryModalProps) {
   const [projectName, setProjectName] = useState<string>("");
   const [deadLine, setDeadLine] = useState<Date | null>(null);
 
-  async function onSaveProject(event: FormSubmitEvent) {
-    event.preventDefault();
-
+  async function onSaveProject() {
     const projectDeadLine = deadLine ? deadLine : new Date(Date.now());
 
     await addProject({ deadLine: projectDeadLine, name: projectName });
@@ -49,7 +47,7 @@ export function NewProjectModal(props: NewEntryModalProps) {
       isOpen={isOpen}
       disabled={deadLine && projectName ? false : true}
       onRequestClose={onRequestClose}
-      onSubmit={(e) => onSaveProject(e)}
+      onSubmit={() => onSaveProject()}
     >
       <>
         <div className="form-field">

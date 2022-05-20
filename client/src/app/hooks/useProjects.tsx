@@ -3,6 +3,8 @@ import { Project } from "../models/Project";
 
 import { useScreenState } from "./useScreenState";
 import { axiosApiService } from "../api/projects";
+import { Entry } from "../models/Entry";
+import { storeEntry } from "../services/storage";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -14,6 +16,7 @@ interface ProjectContextData {
   setProjectId: (id: number) => void;
   setProjects: (projects: Project[]) => void;
   addProject: (project: Partial<Project>) => Promise<void>;
+  addEntry: (entry: Entry) => void;
 }
 
 const ProjectsContext = createContext<ProjectContextData>({} as ProjectContextData);
@@ -22,7 +25,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState<number | null>(null);
 
-  const { shouldUpdate, setShouldUpdate, setSnackBarMsg } = useScreenState();
+  const { shouldUpdate, setShouldUpdate, setSnackBarMsg, setShowSnackBar } = useScreenState();
 
   async function fetchProjects(): Promise<void> {
     try {
@@ -44,6 +47,10 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
       .catch(() => setSnackBarMsg("Couldn't add Project"));
   }
 
+  async function addEntry(entry: Entry) {
+    storeEntry(entry);
+  }
+
   useEffect((): void => {
     shouldUpdate && fetchProjects();
     setShouldUpdate(false);
@@ -57,6 +64,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         setProjectId,
         setProjects,
         addProject,
+        addEntry,
       }}
     >
       {children}

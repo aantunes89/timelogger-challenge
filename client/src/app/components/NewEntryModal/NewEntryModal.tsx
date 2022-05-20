@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useProjects } from "../../hooks/useProjects";
 import { useScreenState } from "../../hooks/useScreenState";
-import { storeEntry } from "../../services/storage";
 import { CustomModal } from "../CustomModal/CustomModal";
-import { FormSubmitEvent } from "../../types/FormEvents";
 
 interface NewEntryModalProps {
   isOpen: boolean;
@@ -12,7 +10,7 @@ interface NewEntryModalProps {
 }
 
 export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
-  const { projectId } = useProjects();
+  const { projectId, addEntry } = useProjects();
   const { setShouldUpdate, setShowSnackBar, setSnackBarMsg } = useScreenState();
 
   const [description, setDescription] = useState<string>("");
@@ -24,10 +22,8 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
     timeSpent && hourlyRate ? setTotalPrice(timeSpent * hourlyRate) : setTotalPrice(0);
   }, [timeSpent, hourlyRate]);
 
-  async function onSaveEntry(event: FormSubmitEvent) {
-    event.preventDefault();
-
-    storeEntry({
+  function onSaveEntry() {
+    addEntry({
       projectId,
       description,
       timeSpent,
@@ -53,7 +49,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
       onRequestClose={onRequestClose}
       title="New Entry"
       disabled={totalPrice ? false : true}
-      onSubmit={(e) => onSaveEntry(e)}
+      onSubmit={() => onSaveEntry()}
       totalPrice={totalPrice}
     >
       <>
@@ -69,6 +65,7 @@ export function NewEntryModal({ isOpen, onRequestClose }: NewEntryModalProps) {
         <div className="form-field">
           <label>Time Spent</label>
           <input
+            role="time-spent-input"
             type="number"
             min={0}
             value={timeSpent}

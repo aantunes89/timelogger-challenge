@@ -18,9 +18,7 @@ interface ScreenStateContextData {
   setSnackBarMsg: (value: string) => void;
 }
 
-const ScreenStateContext = createContext<ScreenStateContextData>({} as ScreenStateContextData);
-
-export function ScreenStateProvider({ children }: ScreenStateProviderProps) {
+export const useScreenStatesGetter = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [shouldUpdate, setShouldUpdate] = useState<boolean>(true);
   const [isProjectModalOpen, setProjectModalOpen] = useState<boolean>(false);
@@ -28,19 +26,29 @@ export function ScreenStateProvider({ children }: ScreenStateProviderProps) {
   const [showSnackBar, setShowSnackBar] = useState<boolean>(false);
   const [snackBarMsg, setSnackBarMsg] = useState<string>("");
 
+  return {
+    isModalOpen,
+    setModalOpen,
+    shouldUpdate,
+    setShouldUpdate,
+    isProjectModalOpen,
+    setProjectModalOpen,
+    showSnackBar,
+    setShowSnackBar,
+    snackBarMsg,
+    setSnackBarMsg,
+  };
+};
+
+const ScreenStateContext = createContext<ScreenStateContextData>({} as ScreenStateContextData);
+
+export function ScreenStateProvider({ children }: ScreenStateProviderProps) {
+  const screenStates = useScreenStatesGetter();
+
   return (
     <ScreenStateContext.Provider
       value={{
-        isModalOpen,
-        setModalOpen,
-        shouldUpdate,
-        setShouldUpdate,
-        isProjectModalOpen,
-        setProjectModalOpen,
-        showSnackBar,
-        setShowSnackBar,
-        snackBarMsg,
-        setSnackBarMsg,
+        ...screenStates,
       }}
     >
       <ProjectsProvider children={children} />

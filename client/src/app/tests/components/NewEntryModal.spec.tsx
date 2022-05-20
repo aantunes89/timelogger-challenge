@@ -1,20 +1,25 @@
+import React from "react";
 import { fireEvent, render } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks";
 import Modal from "react-modal";
 import { NewEntryModal } from "../../components/NewEntryModal/NewEntryModal";
-import { renderHook, act } from "@testing-library/react-hooks";
-import { Dispatch, useState } from "react";
-import React from "react";
+import { useScreenState, useScreenStatesGetter } from "../../hooks/useScreenState";
 
 describe("", () => {
   Modal.setAppElement(document.createElement("div"));
 
   it("should render NewEntryModal", () => {
-    const { getByText } = render(<NewEntryModal isOpen={true} onRequestClose={jest.fn()} />);
+    const { getByText, getByRole } = render(
+      <NewEntryModal isOpen={true} onRequestClose={jest.fn()} />
+    );
 
     expect(getByText("New Entry")).toBeInTheDocument();
     expect(getByText("Task Description")).toBeInTheDocument();
     expect(getByText("Time Spent")).toBeInTheDocument();
     expect(getByText("Hourly Rate")).toBeInTheDocument();
+    expect(getByText("Submit")).toBeInTheDocument();
+    expect(getByText("Cancel")).toBeInTheDocument();
+    expect(getByRole("time-spent-input")).toBeInTheDocument();
   });
 
   it("should change task description input value", () => {
@@ -57,9 +62,9 @@ describe("", () => {
   });
 
   it("should change hourly rate input value", () => {
-    const setState = jest.fn();
+    const setState = jest.fn().mockImplementation((val) => Number.parseInt(val));
 
-    const useStateMock: any = (state: any) => [state, setState];
+    const useStateMock: any = (state: number = 1) => [state, setState];
     jest.spyOn(React, "useState").mockImplementation(useStateMock);
 
     const { getByText } = render(<NewEntryModal isOpen={true} onRequestClose={jest.fn} />);
@@ -69,5 +74,17 @@ describe("", () => {
     fireEvent.change(hourlyRate);
 
     expect(setState).toHaveBeenCalled();
+    expect(useStateMock.state).not.toEqual(1);
+  });
+
+  it("should call onRequestClose", () => {
+    const cancelMockFn = jest.fn();
+
+    const { getByText } = render(<NewEntryModal isOpen={true} onRequestClose={cancelMockFn} />);
+
+    const cancelBtn = getByText("Cancel");
+    fireEvent.click(cancelBtn);
+
+    expect(cancelMockFn).toHaveBeenCalled();
   });
 });
