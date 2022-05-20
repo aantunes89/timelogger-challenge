@@ -49,13 +49,16 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   }
 
   async function addProject({ name, deadLine: projectDeadLine }: Partial<Project>): Promise<void> {
-    await axiosApiService
-      .post<Project>("/projects", {
+    try {
+      await axiosApiService.post<Project>("/projects", {
         name,
         deadLine: projectDeadLine?.toISOString(),
-      })
-      .then(() => setSnackBarMsg("Successfully saved"))
-      .catch(() => setSnackBarMsg("Couldn't add Project"));
+      });
+
+      setSnackBarMsg("Successfully saved");
+    } catch (error) {
+      setSnackBarMsg("Couldn't add Project");
+    }
   }
 
   async function addEntry(entry: Entry) {
