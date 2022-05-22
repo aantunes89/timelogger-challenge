@@ -22,109 +22,110 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ContentContainer } from "./styles";
+import { Project } from "../../models/Project";
 
-export default function Table() {
-  const { projects, setProjectId } = useProjects();
+interface TableProps {
+  project: Project;
+}
+
+export default function Table({ project }: TableProps) {
+  const { setProjectId } = useProjects();
   const { setModalOpen } = useScreenState();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  function addEntry(projectId: number) {
+  function addEntry(projectId: number): void {
     setProjectId(projectId);
     setModalOpen(true);
   }
 
   return (
     <>
-      {projects?.map((project) => {
-        return (
-          <Accordion key={project.id}>
-            <AccordionSummary id={`panel${project.id}`} expandIcon={<ExpandMoreIcon />}>
-              <ContentContainer>
-                <Grid container spacing={2}>
-                  <Grid item xs={3}>
-                    <Typography className="truncate">
-                      <label>Name</label>
-                      {project?.name}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>
-                      <label>Deadline</label>
-                      {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>
-                      <label>Total Price</label>
-                      {`$${project?.totalPrice}`}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography>
-                      <label>Total Work Time</label>
-                      {`${project?.totalTimeSpent}h`}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ContentContainer>
-            </AccordionSummary>
+      <Accordion key={project.id}>
+        <AccordionSummary id={`panel${project.id}`} expandIcon={<ExpandMoreIcon />}>
+          <ContentContainer>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <Typography className="truncate">
+                  <label>Name</label>
+                  {project?.name}
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>
+                  <label>Deadline</label>
+                  {new Date(`${project?.deadLine}`).toLocaleDateString("pt-BR")}
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>
+                  <label>Total Price</label>
+                  {`$${project?.totalPrice}`}
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>
+                  <label>Total Work Time</label>
+                  {`${project?.totalTimeSpent}h`}
+                </Typography>
+              </Grid>
+            </Grid>
+          </ContentContainer>
+        </AccordionSummary>
 
-            <AccordionDetails>
-              <TableContainer component={Paper}>
-                <DataTable sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Task Description</TableCell>
-                      <TableCell align="center">Hours Spent</TableCell>
-                      <TableCell align="center">Hourly Rate</TableCell>
-                      <TableCell align="center">Total</TableCell>
+        <AccordionDetails>
+          <TableContainer component={Paper}>
+            <DataTable sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Task Description</TableCell>
+                  <TableCell align="center">Hours Spent</TableCell>
+                  <TableCell align="center">Hourly Rate</TableCell>
+                  <TableCell align="center">Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {project.entries
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((entry, id) => (
+                    <TableRow
+                      key={id}
+                      hover
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {entry.description}
+                      </TableCell>
+                      <TableCell align="center">{entry.timeSpent}h</TableCell>
+                      <TableCell align="center">${entry.hourlyRate}</TableCell>
+                      <TableCell align="center">${entry.totalPrice}</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {project.entries
-                      ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((entry) => (
-                        <TableRow
-                          key={entry.id}
-                          hover
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {entry.description}
-                          </TableCell>
-                          <TableCell align="center">{entry.timeSpent}h</TableCell>
-                          <TableCell align="center">${entry.hourlyRate}</TableCell>
-                          <TableCell align="center">${entry.totalPrice}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </DataTable>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[5, 10]}
-                component="div"
-                count={project.entries.length}
-                rowsPerPage={5}
-                page={page > 0 && project.entries.length < rowsPerPage ? 0 : page}
-                onPageChange={(e, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(Number.parseInt(event.target.value))}
-              />
+                  ))}
+              </TableBody>
+            </DataTable>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10]}
+            component="div"
+            count={project.entries.length}
+            rowsPerPage={5}
+            page={page > 0 && project.entries.length < rowsPerPage ? 0 : page}
+            onPageChange={(e, newPage) => setPage(newPage)}
+            onRowsPerPageChange={(event) => setRowsPerPage(Number.parseInt(event.target.value))}
+          />
 
-              <Button
-                style={{ marginTop: "2rem" }}
-                variant="outlined"
-                onClick={() => addEntry(project.id)}
-              >
-                Add Entry
-              </Button>
-            </AccordionDetails>
-          </Accordion>
-        );
-      })}
+          <Button
+            style={{ marginTop: "2rem" }}
+            variant="outlined"
+            onClick={() => addEntry(project.id)}
+          >
+            Add Entry
+          </Button>
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { useScreenState } from "./useScreenState";
 import { axiosApiService } from "../api/projects";
 import { Entry } from "../models/Entry";
 import { storeEntry } from "../services/storage";
+import { sortProjectsByDate } from "../services/helpers/data-formatter";
 
 interface ProjectsProviderProps {
   children: ReactNode;
@@ -17,6 +18,9 @@ interface ProjectContextData {
   setProjects: (projects: Project[]) => void;
   addProject: (project: Partial<Project>) => Promise<void>;
   addEntry: (entry: Entry) => void;
+  fetchProjects: () => void;
+  isSorted: boolean;
+  setIsSorted: (value: boolean) => void;
 }
 
 const ProjectsContext = createContext<ProjectContextData>({} as ProjectContextData);
@@ -24,12 +28,15 @@ const ProjectsContext = createContext<ProjectContextData>({} as ProjectContextDa
 export const useProjectsStateBuilder = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState<number | null>(null);
+  const [isSorted, setIsSorted] = useState<boolean>(false);
 
   return {
     projects,
     projectId,
     setProjectId,
     setProjects,
+    isSorted,
+    setIsSorted,
   };
 };
 
@@ -39,10 +46,13 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const { shouldUpdate, setShouldUpdate, setSnackBarMsg } = useScreenState();
 
   async function fetchProjects(): Promise<void> {
+    const { isSorted, setProjects } = projectsState;
     try {
       const { data } = await axiosApiService.get<Project[]>("/projects");
 
-      projectsState.setProjects([...data]);
+      const newProjectList = isSorted ? sortProjectsByDate(data) : data;
+
+      setProjects([...newProjectList]);
     } catch (error) {
       setSnackBarMsg("Couldn't find any Project");
     }
@@ -76,6 +86,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         ...projectsState,
         addProject,
         addEntry,
+        fetchProjects,
       }}
     >
       {children}

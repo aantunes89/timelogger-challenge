@@ -2,12 +2,14 @@ import * as React from "react";
 import Projects from "./views/Projects";
 import { GlobalStyle } from "./styles/global";
 import { ScreenStateProvider } from "./hooks/useScreenState";
+import ComposedProvider from "./hooks/index";
 
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { ProjectsProvider } from "./hooks/useProjects";
 
 export default function App() {
   return (
-    <ScreenStateProvider>
+    <ComposedProvider components={[ScreenStateProvider, ProjectsProvider]}>
       <GlobalStyle />
 
       <Box sx={{ flexGrow: 1 }} data-testid="header-wrapper">
@@ -17,7 +19,7 @@ export default function App() {
               data-testid="typography-header"
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, margin: "0 6rem" }}
             >
               Timelogger
             </Typography>
@@ -25,9 +27,9 @@ export default function App() {
         </AppBar>
       </Box>
 
-      <Box sx={{ flexGrow: 1 }} padding={4} data-testid="body-wrapper">
+      <Box sx={{ flexGrow: 1, margin: "0 6rem" }} padding={4} data-testid="body-wrapper">
         <Projects />
       </Box>
-    </ScreenStateProvider>
+    </ComposedProvider>
   );
 }

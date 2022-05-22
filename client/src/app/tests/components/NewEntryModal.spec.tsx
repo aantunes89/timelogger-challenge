@@ -1,9 +1,7 @@
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { renderHook, act } from "@testing-library/react-hooks";
 import Modal from "react-modal";
 import { NewEntryModal } from "../../components/NewEntryModal/NewEntryModal";
-import { useScreenState, useScreenStatesGetter } from "../../hooks/useScreenState";
 
 describe("", () => {
   Modal.setAppElement(document.createElement("div"));

@@ -7,8 +7,6 @@ import DatePicker from "@mui/lab/DatePicker";
 
 import { useScreenState } from "../../hooks/useScreenState";
 
-import { FormSubmitEvent } from "../../types/FormEvents";
-
 import { CustomModal } from "../CustomModal/CustomModal";
 import { useProjects } from "../../hooks/useProjects";
 
@@ -59,7 +57,7 @@ export function NewProjectModal(props: NewEntryModalProps) {
           />
         </div>
 
-        <div className="form-field">
+        <div className="form-field" data-testid="date-picker-wrapper">
           <label>Deadline</label>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={4} sx={{ width: "100%" }}>
