@@ -1,37 +1,35 @@
-import { fireEvent, render } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks";
+import { render, waitFor } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react-hooks";
 import Table from "../../components/Table/Table";
 import { useProjectsStateBuilder } from "../../hooks/useProjects";
+import { Project } from "../../models/Project";
+
+const mockProjects: Project[] = [
+  {
+    id: 1,
+    name: "Project 1",
+    deadLine: new Date(2022, 4, 1),
+    totalPrice: 0,
+    totalTimeSpent: 0,
+    entries: [],
+  },
+];
 
 describe("Table Component", () => {
-  it("Should render elements", () => {
+  it("Should render elements", async () => {
     const { result } = renderHook(() => useProjectsStateBuilder());
-    const { getByText } = render(<Table />);
+    act(() => {
+      result.current.setProjects(mockProjects);
+    });
 
-    result.current.projects.forEach((project) => {
+    const { getByText } = render(<Table project={mockProjects[0]} />);
+
+    await waitFor(() => {
       expect(getByText("Name")).toBeInTheDocument();
       expect(getByText("Deadline")).toBeInTheDocument();
       expect(getByText("Total Price")).toBeInTheDocument();
       expect(getByText("Total Work Time")).toBeInTheDocument();
       expect(getByText("Add Entry")).toBeInTheDocument();
-    });
-  });
-
-  it("", () => {
-    const { result } = renderHook(() => useProjectsStateBuilder());
-    const { getByText } = render(<Table />);
-
-    const addEntryMock = jest.fn().mockImplementation(() => result.current.setProjectId(1));
-
-    result.current.projects.forEach((project) => {
-      const addBtn = getByText("Add Entry");
-      addBtn.addEventListener("click", addEntryMock);
-
-      fireEvent.click(addBtn);
-
-      expect(result.current.projectId).toEqual(1);
-      expect(result.current.setProjectId).toHaveBeenCalled();
-      expect(addEntryMock).toHaveBeenCalled();
     });
   });
 });

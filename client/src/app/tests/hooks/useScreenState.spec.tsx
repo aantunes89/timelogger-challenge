@@ -2,24 +2,8 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import { useScreenStatesGetter } from "../../hooks/useScreenState";
 
 describe("useScreenState hook", () => {
-  let result: any;
-
-  beforeEach(() => {
-    const hook = renderHook(() => useScreenStatesGetter());
-    return (result = hook.result);
-  });
-
-  it("should update shouldUpdate state", () => {
-    expect(result.current.shouldUpdate).toEqual(true);
-
-    act(() => {
-      result.current.setShouldUpdate(false);
-    });
-
-    expect(result.current.shouldUpdate).toEqual(false);
-  });
-
   it("should update isModalOpen", () => {
+    const { result } = renderHook(() => useScreenStatesGetter());
     expect(result.current.isModalOpen).toEqual(false);
 
     act(() => {
@@ -30,6 +14,7 @@ describe("useScreenState hook", () => {
   });
 
   it("should update isProjectModalOpen", () => {
+    const { result } = renderHook(() => useScreenStatesGetter());
     expect(result.current.isProjectModalOpen).toEqual(false);
 
     act(() => {
@@ -40,6 +25,7 @@ describe("useScreenState hook", () => {
   });
 
   it("should update snackBarMsg", () => {
+    const { result } = renderHook(() => useScreenStatesGetter());
     const snackBarMsg = "Success!";
     expect(result.current.snackBarMsg).toEqual("");
 
@@ -51,6 +37,7 @@ describe("useScreenState hook", () => {
   });
 
   it("should update showSnackBar", () => {
+    const { result } = renderHook(() => useScreenStatesGetter());
     expect(result.current.showSnackBar).toEqual(false);
 
     act(() => {

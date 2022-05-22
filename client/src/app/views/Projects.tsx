@@ -13,15 +13,12 @@ import { CustomSnackBar } from "../components/CustomSnackBar/CustomSnackBar";
 export default function Projects() {
   const { isModalOpen, setModalOpen, isProjectModalOpen, setProjectModalOpen } = useScreenState();
 
-  const { setProjects, projects } = useProjects();
+  const { projects, setIsSorted, isSorted } = useProjects();
+  const { setShouldUpdate } = useScreenState();
 
   function sortByDeadLine() {
-    const sortedProjects = projects.sort(
-      (prevProject, currProject) =>
-        new Date(prevProject.deadLine).getTime() - new Date(currProject.deadLine).getTime()
-    );
-
-    setProjects([...sortedProjects]);
+    setIsSorted(!isSorted);
+    setShouldUpdate(true);
   }
 
   return (
@@ -38,7 +35,7 @@ export default function Projects() {
           </Button>
 
           <Button size="large" variant="outlined" onClick={() => sortByDeadLine()}>
-            Prioritise My Work
+            {isSorted ? "Disarrange" : "Prioritise My Work"}
           </Button>
         </Box>
       </Container>
@@ -52,7 +49,9 @@ export default function Projects() {
 
       <CustomSnackBar />
 
-      <Table />
+      {projects?.map((project, index) => (
+        <Table key={index} project={project} />
+      ))}
     </>
   );
 }
